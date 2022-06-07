@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+//   Вам нужно сделать конструктор сущности Студент.
+
+
+
+//   У Студента есть имя, фамилия, год рождения — это свойства.
+//   И есть возможность получить возраст студента и его средний бал — это методы.
+//   Еще у всех Студентов есть по 2 массива одинаковой длины, в них 10 элементов, изначально они не заполнены, но на 10 
+//   элементов. Это массив в котором отмечается посещаемость, каждый раз когда мы вызываем метод .present() на очередное
+//   пустое место в массив записывается true, когда вызываем .absent() — записывается false и второй - массив с оценками
+//   и метод mark(), мы можем передать оценку от 0 до 10. Длина тоже фиксированная
+
+
+// Предусмотрите какую нибудь защиту от того чтоб в массивах не могло быть более 10 записей. Массив это свойство, present 
+// и absent, mark — методы.
+
+
+
+//  Ну и последний метод: .summary(), он проверяет среднюю оценку, и среднее посещение, и если средняя оценка больше 9 а
+//  среднее посещение больше 0.9, то метод summary, возвращает строку "Ути какой молодчинка!", если одно из этих значений 
+//  меньше, то — "Норм, но можно лучше", если оба ниже — "Редиска!". Ну и не забудьте после того как напишите замечательный 
+//  конструктор, создать пару экземпляров(конкретных студентов) и подергать методы.
+
+
+
+// Не используйте push - он вам тут не друг) Вам нужно искать индекс ближайшего пустого места в массиве и перезаписывать)
+
+
+        function Student(name, surname, yearOfBirth) {
+            this.name = name;
+            this.surname = surname;
+            this.yearOfBirth = yearOfBirth;
+            
+            this.attendance = new Array(10);
+            this.grades = new Array(10);
+        }
+
+            Student.prototype.getAge = function () {
+                return new Date().getFullYear() - this.yearOfBirth;;
+            };
+        
+
+
+            Student.prototype.present = function (){
+                const findIndex = this.attendance.findIndex(item =>!item);
+                if(findIndex === -1) return
+
+                this.attendance.splice(findIndex, 1, true);
+            }
+
+
+            Student.prototype.absent = function(){
+                const findIndex = this.attendance.findIndex(item => !item);
+                if(findIndex === -1) return
+
+                this.attendance.splice(findIndex,1,false);
+            }
+
+            Student.prototype.mark = function (grade) {
+                if (this.grades.findIndex((el) => el === undefined) !== -1) {
+                    this.grades[this.grades.findIndex((el) => el === undefined)] = grade
+                }
+            };
+
+            Student.prototype.averageGrade = function (grades = this.grades) {
+                let gradesCount = 0;
+
+                return grades.reduce((acc, el) => {
+                    if (el !== undefined) {
+                        ++gradesCount;
+                        acc += el
+                    }
+                    return acc
+
+                }, 0) / gradesCount
+            };
+
+
+            Student.prototype.summary = function () {
+                const averageAttendance = this.averageGrade(this.attendance);
+
+                if (this.averageGrade() > 9 && averageAttendance > 0.9) {
+                    return 'Ути какой молодчинка!';
+                }
+
+                if (this.averageGrade() <= 9 && averageAttendance <= 0.9) {
+                    return 'Редиска!';
+                }
+
+                if (this.averageGrade() <= 9 || averageAttendance <= 0.9) {
+                    return 'Норм, но можно лучше';
+                }
+            };
+
+        
+
+
+        const student1 = new Student('Elena', 'Ivanova', '2000');
+        const student2 = new Student('Ivan', 'Ivanov', '2001');
+
+        console.log(student1.name, student1.surname);
+        console.log('age', student1.getAge());
+        student1.absent();
+        student1.absent();
+        student1.absent();
+        student1.absent();
+        student1.absent();
+        student1.absent();
+        student1.absent();
+        student1.absent();
+        student1.absent();
+        student1.present();
+        student1.absent();
+        student1.absent();
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        student1.mark(8);
+        console.log('averageGrade', student1.averageGrade());
+        console.log('summary:', student1.summary());
+        console.log('student1 ', student1);
+
+        console.log('   ');
+
+        console.log(student2.name, student2.surname);
+        console.log('age', student2.getAge());
+        student2.present();
+        student2.present();
+        student2.present();
+        student2.present();
+        student2.present();
+        student2.present();
+        student2.present();
+        student2.absent();
+        student2.mark(10);
+        student2.mark(10);
+        student2.mark(10);
+        student2.mark(10);
+        student2.mark(8);
+        console.log('averageGrade', student2.averageGrade());
+        console.log('summary:', student2.summary());
+        console.log('student2 ', student2);
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
